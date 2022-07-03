@@ -1,0 +1,20 @@
+#board{
+    display: grid;
+    grid-template-columns: 151px 151px 151px;
+    grid-template-rows: 151px 151px 151px;
+    width: 453px;
+    height: 453px;
+    flex-wrap: wrap;
+    background-color: orange;
+}
+
+.cell{
+    width: 150px;
+    height: 150px;
+    font-size: 150px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+}

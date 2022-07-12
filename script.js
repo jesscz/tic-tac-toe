@@ -13,25 +13,30 @@ const createBoard = (() => {
                 cell.id = `${i},${j}`;
                 cell.innerText = board[i][j];
                 boardDisplay.append(cell);
-                function gameClick(){
-                    if (cell.innerText === ""){
-                        cell.innerText = playGame.playMarker();
-                        if (playGame.checkForWinner(cell) === true){
-                            for (let i = 0; i < 3; i++){
-                                    for (let j = 0; j < 3; j++){
-                                        cell.removeEventListener("click", () => {gameClick();});
-                                    }
-                                }
-                        }
-                    }
-                }
-                cell.addEventListener("click", () => {gameClick();});
-                            // 
-                
+                cell.addEventListener("click", () => {gameClick(cell);});   
             }
         }
-    
     })();
+    const gameClick = (cell) => {
+        if (cell.innerText === ""){
+            cell.innerText = playGame.playMarker();
+            // console.log(counter);
+            if (playGame.checkForWinner(cell) == true){
+                winner();
+            }
+        }
+    }
+    const winner = () => {
+        for (let i = 0; i < 3; i++){ //removes all the event listener (since there is a winner)
+            for (let j = 0; j < 3; j++){
+                let toReplace = (document.getElementById(`${i}`+","+`${j}`));
+                let replacement = toReplace.cloneNode(true);
+                toReplace.parentNode.replaceChild(replacement, toReplace); //removing the event listener
+            }
+        }
+
+    }
+    return {create, gameClick, winner};
 })();
 
 const Player = (marker) => {
@@ -114,10 +119,6 @@ const playGame = (() => {
             }
         }
     }  
-            
-            
-        
-    
     return {playMarker, checkForWinner};
 })();
 

@@ -1,100 +1,3 @@
-// const counterCreator = (counter) =>{
-//     const count = () => counter++;
-//     let count = 0;
-//     return() => {
-//         console.log(count);
-//         count++;
-//     };
-//     return {count};
-// };
-
-const createBoard = (() => {
-    const boardDisplay = document.getElementById("board");
-    const endMessage = document.getElementById("message");
-    let restartBtn = document.createElement("button");
-    restartBtn.innerText = "Restart"
-    const board = [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
-    ];
-    // const num = counterCreator("0");
-    // const total = num.count;
-    // let counter = 0;
-    // console.log(counterCreator.count(counter));
-    const initialCreate = (() => {   
-        // create(total);
-        create();
-    })();
-    function create(){
-        for (let i = 0; i < 3; i++){
-            for (let j = 0; j < 3; j++){
-                let cell = document.createElement("div");
-                cell.className = "cell";
-                cell.id = `${i},${j}`;
-                cell.innerText = board[i][j];
-                boardDisplay.append(cell);
-                cell.addEventListener("click", () => {gameClick(cell);});   
-            }
-        }
-    }
-    const gameClick = (cell) => {
-        if (cell.innerText === ""){
-            const toPlay = playGame.playMarker();
-            cell.innerText = toPlay;
-            board[cell.id.charAt(0)][cell.id.charAt(2)] = toPlay;
-            if (playGame.checkForWinner(cell) == true){
-                winner(toPlay);
-            }
-            else{
-                let boardSpacePlayed = 0;
-                for (let i = 0; i < 3; i++){ 
-                    for (let j = 0; j < 3; j++){
-                        if (board[i][j] != null){
-                            boardSpacePlayed++;
-                            if (boardSpacePlayed === 9){
-                                tie();
-                            }
-                        }
-                    }
-                }
-            }                
-        }
-    }
-    const recreate = () => {
-        for (let i = 0; i < 3; i++){
-            for (let j = 0; j < 3; j++){
-                board[i][j] = null;
-            }
-        }
-        // console.log(board);
-        // counter = 0;
-        boardDisplay.innerHTML = "";
-        endMessage.innerHTML = "";
-        create();   
-        
-    }
-    const winner = (winnerMarker) => {
-        for (let i = 0; i < 3; i++){ //removes all the event listener (since there is a winner)
-            for (let j = 0; j < 3; j++){
-                let toReplace = (document.getElementById(`${i}`+","+`${j}`));
-                let replacement = toReplace.cloneNode(true);
-                toReplace.parentNode.replaceChild(replacement, toReplace); //removing the event listener
-            }
-        }
-        endMessage.append(winnerMarker+" is the winner");
-        endMessage.append(restartBtn);
-        restartBtn.addEventListener("click", () => {recreate();});
-    }
-    const tie = () => {
-        endMessage.append("it is a tie");
-        endMessage.append(restartBtn);
-        restartBtn.addEventListener("click", () => {recreate();});
-
-    }
-    return {initialCreate, create, gameClick, winner};
-})();
-
 const Player = (marker) => {
     const setMarker = () => marker;
     return {setMarker};
@@ -104,17 +7,16 @@ const playGame = (() => {
     const player1 = Player("X");
     const player2 = Player("O");
     let num = 0;
-    const playMarker = () => {
-        // while(counter < 9){
+    const playMarker = (cell) => {
             if (num === 0){
                 num = 1;
+                document.getElementById(cell.id).style.color = "#da9047";
                 return (player1.setMarker());
             }
             else if(num === 1){
                 num = 0;
                 return (player2.setMarker());
             }
-        // }
     }
     const checkForWinner = (cell) => {
         let winCount = 0;
@@ -175,5 +77,98 @@ const playGame = (() => {
     }  
     return {playMarker, checkForWinner};
 })();
+
+const createBoard = (() => {
+    const playMessage = document.getElementById("playing");
+    const boardDisplay = document.getElementById("board");
+    const endMessage = document.getElementById("end-message");
+    let restartBtn = document.createElement("button");
+    restartBtn.innerText = "Restart"
+    const board = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+    ];
+    let message = document.createElement("p");
+    const initialCreate = (() => {
+        create();
+    })();
+    function create(){
+        
+        for (let i = 0; i < 3; i++){
+            for (let j = 0; j < 3; j++){
+                let cell = document.createElement("div");
+                cell.className = "cell";
+                cell.id = `${i},${j}`;
+                cell.innerText = board[i][j];
+                boardDisplay.append(cell);
+                // playMessage.append("click to play a: ");
+                // const toPlay = playGame.playMarker(cell);
+                cell.addEventListener("click", () => {gameClick(cell); });   
+            }
+        }
+    }
+    // const alertUser = () => {
+    //     const toPlay = playGame.playMarker(cell);
+    // }
+    const gameClick = (cell) => {
+        if (cell.innerText === ""){
+            const toPlay = playGame.playMarker(cell);
+            cell.innerText = toPlay;
+            board[cell.id.charAt(0)][cell.id.charAt(2)] = toPlay;
+            if (playGame.checkForWinner(cell) == true){
+                winner(toPlay);
+            }
+            else{
+                let boardSpacePlayed = 0;
+                for (let i = 0; i < 3; i++){ 
+                    for (let j = 0; j < 3; j++){
+                        if (board[i][j] != null){
+                            boardSpacePlayed++;
+                            if (boardSpacePlayed === 9){
+                                tie();
+                            }
+                        }
+                    }
+                }
+            }                
+        }
+    }
+    const recreate = () => {
+        for (let i = 0; i < 3; i++){
+            for (let j = 0; j < 3; j++){
+                board[i][j] = null;
+            }
+        }
+        boardDisplay.innerHTML = "";
+        endMessage.innerHTML = "";
+        create();   
+    }
+    const winner = (winnerMarker) => {
+        for (let i = 0; i < 3; i++){ //removes all the event listener (since there is a winner)
+            for (let j = 0; j < 3; j++){
+                let toReplace = (document.getElementById(`${i}`+","+`${j}`));
+                let replacement = toReplace.cloneNode(true);
+                toReplace.parentNode.replaceChild(replacement, toReplace); //removing the event listener
+            }
+        }
+        message.innerText = winnerMarker+" is the winner";
+        end(message);
+    }
+    const tie = () => {
+        message.innerText = "it is a tie";
+        end(message);
+    }
+    const end = (message) => {
+        endMessage.append(message);
+        endMessage.append(restartBtn);
+        restartBtn.addEventListener("click", () => {recreate();});
+    }
+    return {initialCreate};
+})();
+
+
+
+
 
 

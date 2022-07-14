@@ -10,15 +10,15 @@ const playGame = (() => {
     const player2 = Player("O");
     let num = 0;
     const playMarker = (cell) => {
-            if (num === 0){
-                num = 1;
-                document.getElementById(cell.id).style.color = "#da9047";
-                return (player1.setMarker());
-            }
-            else if(num === 1){
-                num = 0;
-                return (player2.setMarker());
-            }
+        if (num === 0){
+            num = 1;
+            document.getElementById(cell.id).style.color = "#da9047";
+            return ([player1.setMarker(), num]);
+        }
+        else if(num === 1){
+            num = 0;
+            return ([player2.setMarker(), num]);
+        }
     }
     const checkForWinner = (cell) => {
         let winCount = 0;
@@ -76,21 +76,25 @@ const playGame = (() => {
                 }    
             }
         }
-    }  
+    }
+    
     return {
         player1, 
         player2, 
         playMarker, 
-        checkForWinner
+        checkForWinner,
     };
 })();
 
 const createBoard = (() => {
-    const playMessage = document.getElementById("playing");
     const boardDisplay = document.getElementById("board");
     const endMessage = document.getElementById("end-message");
     let restartBtn = document.createElement("button");
     restartBtn.innerText = "Restart"
+    const playMessage = document.getElementById("playing");
+    playMessage.append("click the board to play: ");
+    let playMessageMarker = document.createElement("p");
+    playMessage.append(playMessageMarker);
     const board = [
         [null, null, null],
         [null, null, null],
@@ -101,8 +105,6 @@ const createBoard = (() => {
         create();
     })();
     function create(){
-        playMessage.append("hi");
-        console.log(playGame.player1)
         for (let i = 0; i < 3; i++){
             for (let j = 0; j < 3; j++){
                 let cell = document.createElement("div");
@@ -110,20 +112,28 @@ const createBoard = (() => {
                 cell.id = `${i},${j}`;
                 cell.innerText = board[i][j];
                 boardDisplay.append(cell);
-                // playMessage.append("click to play a: ");
-                // const toPlay = playGame.playMarker(cell);
-                cell.addEventListener("click", () => {gameClick(cell); });   
+                playMessageMarker.innerText = (playGame.player1.setMarker());
+                cell.addEventListener("click", () => {gameClick(cell);}); 
             }
         }
     }
-    // const alertUser = () => {
-    //     const toPlay = playGame.playMarker(cell);
-    // }
+    const alertUser = (num) => {
+        if (num === 0){
+            playMessageMarker.innerText = playGame.player1.setMarker();
+        }
+        else if(num === 1){
+            playMessageMarker.innerText = playGame.player2.setMarker();
+        }
+    }
     const gameClick = (cell) => {
         if (cell.innerText === ""){
-            const toPlay = playGame.playMarker(cell);
+            const returned = playGame.playMarker(cell);
+            const toPlay = returned[0];
+            const number = returned[1];
+            console.log(toPlay, number)
             cell.innerText = toPlay;
             board[cell.id.charAt(0)][cell.id.charAt(2)] = toPlay;
+            alertUser(number);
             if (playGame.checkForWinner(cell) == true){
                 winner(toPlay);
             }

@@ -24,6 +24,10 @@ body{
     justify-content: right;
     margin-right: 20px;
 }
+#playing p{
+    display: grid;
+    justify-content: right;
+}
 #board{
     display: grid;
     grid-row: 2/3;
@@ -53,6 +57,7 @@ body{
     grid-column: 3/4;
     grid-row: 2/3;  
     margin-left: 20px;
+    margin-top: -45px;
     align-content: center;
 }
 

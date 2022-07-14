@@ -9,10 +9,20 @@ body{
     font-family: 'Albert Sans', Arial, Helvetica, sans-serif;
 }
 #title{
+    display: grid;
+    justify-content: center;
     grid-column: 2/3;
     font-weight: 800;
     font-size: 43px;
     margin-top: 1px;
+}
+#playing{
+    display: grid;
+    grid-row: 2/3;
+    grid-column: 1/2;
+    align-content: center;
+    justify-content: right;
+    margin-right: 20px;
 }
 #board{
     display: grid;
@@ -39,12 +49,14 @@ body{
 }
 
 #end-message{
+    display: grid;
     grid-column: 3/4;
     grid-row: 2/3;  
-    margin: 20px;
+    margin-left: 20px;
     align-content: center;
 }
 
 #end-message button{
     font-family: 'Albert Sans', Arial, Helvetica, sans-serif;
+    width: 70px;
 }

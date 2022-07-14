@@ -1,6 +1,8 @@
 const Player = (marker) => {
     const setMarker = () => marker;
-    return {setMarker};
+    return {
+        setMarker
+    };
 };
 
 const playGame = (() => {
@@ -75,7 +77,12 @@ const playGame = (() => {
             }
         }
     }  
-    return {playMarker, checkForWinner};
+    return {
+        player1, 
+        player2, 
+        playMarker, 
+        checkForWinner
+    };
 })();
 
 const createBoard = (() => {
@@ -94,7 +101,8 @@ const createBoard = (() => {
         create();
     })();
     function create(){
-        
+        playMessage.append("hi");
+        console.log(playGame.player1)
         for (let i = 0; i < 3; i++){
             for (let j = 0; j < 3; j++){
                 let cell = document.createElement("div");
@@ -164,7 +172,9 @@ const createBoard = (() => {
         endMessage.append(restartBtn);
         restartBtn.addEventListener("click", () => {recreate();});
     }
-    return {initialCreate};
+    return {
+        initialCreate
+    };
 })();
 
 
